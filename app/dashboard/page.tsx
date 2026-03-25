@@ -1,60 +1,162 @@
 "use client"
 
-import { AppSidebar } from "@/components/app-sidebar"
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { TooltipProvider } from "@/components/ui/tooltip"
+  CurrencyDollarIcon,
+  PackageIcon,
+  ChartLineUpIcon,
+} from "@phosphor-icons/react"
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts"
 
-export default function Page() {
+const tasaData = [
+  { fecha: "Lun", tasa: 36.5 },
+  { fecha: "Mar", tasa: 36.7 },
+  { fecha: "Mie", tasa: 36.6 },
+  { fecha: "Jue", tasa: 36.9 },
+  { fecha: "Vie", tasa: 37.1 },
+  { fecha: "Sab", tasa: 37.0 },
+  { fecha: "Hoy", tasa: 37.25 },
+]
+
+export default function DashboardPage() {
   return (
-    <TooltipProvider delayDuration={0}>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
-              <SidebarTrigger className="-ml-1" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-vertical:h-4 data-vertical:self-auto"
-              />
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
-                      Build Your Application
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
-          </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-              <div className="aspect-video rounded-xl bg-muted/50" />
-              <div className="aspect-video rounded-xl bg-muted/50" />
-              <div className="aspect-video rounded-xl bg-muted/50" />
-            </div>
-            <div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight">Vista General</h1>
+        <p className="text-muted-foreground">
+          Resumen del estado actual de tu inventario
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Tasa BCV</CardTitle>
+            <CurrencyDollarIcon
+              weight="duotone"
+              className="size-5 text-muted-foreground"
+            />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">Bs. 37.25</div>
+            <p className="text-xs text-muted-foreground">
+              +0.68% desde ayer
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Valor Inventario
+            </CardTitle>
+            <ChartLineUpIcon
+              weight="duotone"
+              className="size-5 text-muted-foreground"
+            />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$12,450.00</div>
+            <p className="text-xs text-muted-foreground">
+              Bs. 463,762.50 al cambio
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Productos
+            </CardTitle>
+            <PackageIcon
+              weight="duotone"
+              className="size-5 text-muted-foreground"
+            />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">248</div>
+            <p className="text-xs text-muted-foreground">
+              12 con stock bajo
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Tendencia de Tasa BCV</CardTitle>
+          <CardDescription>
+            Evolución de la tasa en los últimos 7 días
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={tasaData}>
+                <defs>
+                  <linearGradient id="colorTasa" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="hsl(var(--chart-1))"
+                      stopOpacity={0.3}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="hsl(var(--chart-1))"
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="fecha"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${value}`}
+                  domain={["dataMin - 0.5", "dataMax + 0.5"]}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "var(--radius)",
+                    color: "hsl(var(--popover-foreground))",
+                  }}
+                  formatter={(value: number) => [`Bs. ${value}`, "Tasa"]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="tasa"
+                  stroke="hsl(var(--chart-1))"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#colorTasa)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </TooltipProvider>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
