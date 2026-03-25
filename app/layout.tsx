@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
+import { shadcn } from "@clerk/ui/themes"
 import {
   ClerkProvider,
+  OrganizationSwitcher,
   Show,
   SignInButton,
   SignUpButton,
@@ -35,8 +37,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            theme: shadcn,
+          }}
+        >
           <header className="flex h-16 items-center justify-end gap-4 p-4">
+            <OrganizationSwitcher
+              afterCreateOrganizationUrl="/dashboard"
+              afterSelectOrganizationUrl="/dashboard"
+              hidePersonal
+            />
             <Show when="signed-out">
               <SignInButton />
               <SignUpButton>
@@ -49,8 +60,8 @@ export default function RootLayout({
               <UserButton />
             </Show>
           </header>
-          {children}
         </ClerkProvider>
+        {children}
       </body>
     </html>
   )
