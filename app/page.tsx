@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button"
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs"
+import { SignInButton, SignUpButton } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
 import { Package, ArrowRight } from "@phosphor-icons/react/dist/ssr"
 import Link from "next/link"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { userId } = await auth()
+  const isSignedIn = !!userId
+
   return (
     <div className="flex min-h-svh flex-col">
       <header className="flex h-16 items-center justify-between border-b px-6">
@@ -19,24 +18,25 @@ export default function HomePage() {
           <span className="font-semibold">Ventory</span>
         </div>
         <nav className="flex items-center gap-3">
-          <SignedOut>
-            <SignInButton mode="modal">
-              <Button variant="ghost" size="sm">
-                Iniciar Sesión
-              </Button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <Button size="sm">Registrarse</Button>
-            </SignUpButton>
-          </SignedOut>
-          <SignedIn>
+          {!isSignedIn ? (
+            <>
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm">
+                  Iniciar Sesión
+                </Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button size="sm">Registrarse</Button>
+              </SignUpButton>
+            </>
+          ) : (
             <Button asChild size="sm">
               <Link href="/dashboard">
                 Ir al Dashboard
                 <ArrowRight weight="bold" className="ml-2 size-4" />
               </Link>
             </Button>
-          </SignedIn>
+          )}
         </nav>
       </header>
 
@@ -50,22 +50,21 @@ export default function HomePage() {
             Diseñado para el mercado venezolano.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
-            <SignedOut>
+            {!isSignedIn ? (
               <SignUpButton mode="modal">
                 <Button size="lg">
                   Comenzar Gratis
                   <ArrowRight weight="bold" className="ml-2 size-4" />
                 </Button>
               </SignUpButton>
-            </SignedOut>
-            <SignedIn>
+            ) : (
               <Button asChild size="lg">
                 <Link href="/dashboard">
                   Ir al Dashboard
                   <ArrowRight weight="bold" className="ml-2 size-4" />
                 </Link>
               </Button>
-            </SignedIn>
+            )}
           </div>
         </div>
       </main>
