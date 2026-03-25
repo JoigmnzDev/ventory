@@ -9,71 +9,39 @@ export default async function HomePage() {
   const isSignedIn = !!userId
 
   return (
-    <div className="flex min-h-svh flex-col">
-      <header className="flex h-16 items-center justify-between border-b px-6">
-        <div className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Package weight="duotone" className="size-4" />
+    <main className="flex min-h-svh flex-col items-center justify-center bg-background px-6">
+      <div className="flex flex-col items-center gap-8 text-center">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+            <Package weight="duotone" className="size-5" />
           </div>
-          <span className="font-semibold">Ventory</span>
+          <span className="text-2xl font-semibold tracking-tight text-foreground">
+            Ventory
+          </span>
         </div>
-        <nav className="flex items-center gap-3">
-          {!isSignedIn ? (
-            <>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">
-                  Iniciar Sesión
-                </Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button size="sm">Registrarse</Button>
-              </SignUpButton>
-            </>
-          ) : (
-            <Button asChild size="sm">
-              <Link href="/dashboard">
-                Ir al Dashboard
-                <ArrowRight weight="bold" className="ml-2 size-4" />
-              </Link>
-            </Button>
-          )}
-        </nav>
-      </header>
 
-      <main className="flex flex-1 flex-col items-center justify-center px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-            Control de Inventario Inteligente
-          </h1>
-          <p className="mt-6 text-pretty text-lg leading-relaxed text-muted-foreground">
-            Gestiona márgenes y precios en tiempo real con la tasa BCV.
-            Diseñado para el mercado venezolano.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            {!isSignedIn ? (
-              <SignUpButton mode="modal">
-                <Button size="lg">
-                  Comenzar Gratis
-                  <ArrowRight weight="bold" className="ml-2 size-4" />
-                </Button>
-              </SignUpButton>
-            ) : (
-              <Button asChild size="lg">
-                <Link href="/dashboard">
-                  Ir al Dashboard
-                  <ArrowRight weight="bold" className="ml-2 size-4" />
-                </Link>
+        {!isSignedIn ? (
+          <div className="flex items-center gap-3">
+            <SignInButton mode="modal">
+              <Button variant="outline" size="lg" className="min-w-32">
+                Iniciar Sesión
               </Button>
-            )}
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button size="lg" className="min-w-32">
+                Registrarse
+              </Button>
+            </SignUpButton>
           </div>
-        </div>
-      </main>
-
-      <footer className="flex h-14 items-center justify-center border-t px-6">
-        <p className="text-sm text-muted-foreground">
-          Ventory &copy; {new Date().getFullYear()}
-        </p>
-      </footer>
-    </div>
+        ) : (
+          <Button asChild size="lg" className="min-w-40">
+            <Link href="/dashboard">
+              Ir al Dashboard
+              <ArrowRight weight="bold" className="ml-2 size-4" />
+            </Link>
+          </Button>
+        )}
+      </div>
+    </main>
   )
 }
