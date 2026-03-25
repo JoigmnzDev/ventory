@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { SignInButton, SignUpButton } from "@clerk/nextjs"
+import { SignInButton, SignUpButton, Show } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
 import { Package, ArrowRight } from "@phosphor-icons/react/dist/ssr"
 import Link from "next/link"
@@ -19,8 +19,7 @@ export default async function HomePage() {
             Ventory
           </span>
         </div>
-
-        {!isSignedIn ? (
+        <Show when="signed-out">
           <div className="flex items-center gap-3">
             <SignInButton mode="modal">
               <Button variant="outline" size="lg" className="min-w-32">
@@ -33,14 +32,15 @@ export default async function HomePage() {
               </Button>
             </SignUpButton>
           </div>
-        ) : (
+        </Show>
+        <Show when="signed-in">
           <Button asChild size="lg" className="min-w-40">
             <Link href="/dashboard">
               Ir al Dashboard
               <ArrowRight weight="bold" className="ml-2 size-4" />
             </Link>
           </Button>
-        )}
+        </Show>
       </div>
     </main>
   )
