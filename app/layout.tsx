@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ClerkProvider
           appearance={{
-            baseTheme: shadcn,
+            theme: shadcn,
           }}
         >
           {children}
