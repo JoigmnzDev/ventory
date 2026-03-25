@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-
+import Link from "next/link"
+import { useUser, useOrganization } from "@clerk/nextjs"
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -15,88 +15,98 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
-  BookOpenIcon,
   PackageIcon,
   LayoutIcon,
   CurrencyDollarIcon,
-  ChartBarIcon,
-  Command,
+  Package,
 } from "@phosphor-icons/react"
 
-const data = {
-  user: {
-    name: "José G.",
-    email: "jose@ventory.app",
-    avatar: "/avatars/admin.jpg",
+const navMainItems = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: <LayoutIcon weight="duotone" size={20} />,
+    isActive: true,
+    items: [{ title: "Vista General", url: "/dashboard" }],
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: <LayoutIcon weight="duotone" />,
-      isActive: true,
-      items: [
-        { title: "Vista General", url: "/dashboard" },
-        { title: "Análisis de Tasa", url: "#" },
-      ],
-    },
-    {
-      title: "Inventario",
-      url: "/dashboard/inventory",
-      icon: <PackageIcon weight="duotone" />,
-      items: [
-        { title: "Lista de Productos", url: "/dashboard/inventory" },
-        { title: "Ajustar Precios", url: "#" },
-      ],
-    },
-    {
-      title: "Administración",
-      url: "#",
-      icon: <CurrencyDollarIcon weight="duotone" />,
-      items: [{ title: "Configurar Tasa BCV", url: "#" }],
-    },
-  ],
-  projects: [
-    {
-      name: "Reporte de Margen",
-      url: "#",
-      icon: <ChartBarIcon weight="duotone" />,
-    },
-    {
-      name: "Guía de Usuario",
-      url: "#",
-      icon: <BookOpenIcon weight="duotone" />,
-    },
-  ],
-}
+  {
+    title: "Inventario",
+    url: "/dashboard/inventory",
+    icon: <PackageIcon weight="duotone" size={20} />,
+    items: [{ title: "Lista de Productos", url: "/dashboard/inventory" }],
+  },
+  {
+    title: "Administración",
+    url: "#",
+    icon: <CurrencyDollarIcon weight="duotone" size={20} />,
+    items: [{ title: "Configurar Tasa BCV", url: "#" }],
+  },
+]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, isLoaded: isUserLoaded } = useUser()
+  const { organization, isLoaded: isOrgLoaded } = useOrganization()
+
+  const userData = React.useMemo(() => {
+    if (!isUserLoaded || !user) {
+      return null
+    }
+    return {
+      name: user.fullName || user.firstName || "Usuario",
+      email: user.primaryEmailAddress?.emailAddress || "",
+      avatar: user.imageUrl || "",
+    }
+  }, [user, isUserLoaded])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                  <Package weight="duotone" className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  {isOrgLoaded ? (
+                    <>
+                      <span className="truncate font-medium">
+                        {organization?.name || "Ventory"}
+                      </span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        Control de Inventario
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="mt-1 h-3 w-20" />
+                    </>
+                  )}
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={navMainItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {isUserLoaded && userData ? (
+          <NavUser user={userData} />
+        ) : (
+          <div className="flex items-center gap-2 p-2">
+            <Skeleton className="h-8 w-8 rounded-lg" />
+            <div className="flex-1">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="mt-1 h-3 w-32" />
+            </div>
+          </div>
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
