@@ -21,6 +21,7 @@ import {
   LayoutIcon,
   CurrencyDollarIcon,
   Package,
+  ShoppingCart,
 } from "@phosphor-icons/react"
 
 const navMainItems = [
@@ -30,6 +31,12 @@ const navMainItems = [
     icon: <LayoutIcon weight="duotone" size={20} />,
     isActive: true,
     items: [{ title: "Vista General", url: "/dashboard" }],
+  },
+  {
+    title: "Terminal de Venta",
+    url: "/dashboard/pos",
+    icon: <ShoppingCart weight="duotone" size={20} />,
+    items: [{ title: "Punto de Venta", url: "/dashboard/pos" }],
   },
   {
     title: "Inventario",
