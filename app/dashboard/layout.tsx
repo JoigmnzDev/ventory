@@ -28,20 +28,6 @@ export default function DashboardLayout({
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
             </div>
-            <div className="flex items-center gap-3">
-              <OrganizationSwitcher
-                afterCreateOrganizationUrl="/dashboard"
-                afterSelectOrganizationUrl="/dashboard"
-                hidePersonal
-              />
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "h-8 w-8",
-                  },
-                }}
-              />
-            </div>
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
         </SidebarInset>
