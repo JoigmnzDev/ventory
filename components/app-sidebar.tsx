@@ -29,8 +29,8 @@ const navItems = [
     plans: ["basic", "pro"],
   },
   {
-    title: "Inventario",
-    url: "/inventory",
+    title: "Productos",
+    url: "/products",
     icon: HiOutlineCube,
     plans: ["basic", "pro"],
   },

@@ -48,3 +48,25 @@ export const getFullPriceBreakdown = (
     total: subtotalLocal + taxAmount,
   }
 }
+
+/**
+ * Formatea un número a una cadena de moneda localizable.
+ * * @param value - El monto numérico a formatear.
+ * @param currency - Código de moneda (ISO 4217), ej: 'USD', 'ARS', 'EUR'.
+ * @returns String formateado, ej: "$ 1.250,00"
+ */
+export function formatCurrency(
+  value: number | undefined | null,
+  currency: string = "USD"
+): string {
+  if (value === undefined || value === null) return "-"
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+    .format(value)
+    .replace("VES", "Bs.")
+}
